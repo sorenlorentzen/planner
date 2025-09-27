@@ -1,9 +1,7 @@
-using System;
-using Planner.Core.Entities;
 using Planner.Core.Models;
 using Sorenlorentzen.Invokable;
 
-namespace Planner.Core.Commands.Events;
+namespace Planner.Core.Commands.EventChoices;
 
 public class SaveEventChoiceCommand : BaseCommand<Guid>
 {
@@ -16,14 +14,14 @@ public class SaveEventChoiceCommand : BaseCommand<Guid>
 
     public override async Task<Guid> ExecuteAsync()
     {
-        EventChoice choice;
+        Entities.EventChoice choice;
         if (_model.Id != default)
         {
-            choice = await GetSingleEntity<EventChoice>(_model.Id);
+            choice = await GetSingleEntity<Entities.EventChoice>(_model.Id);
         }
         else
         {
-            choice = new EventChoice
+            choice = new Entities.EventChoice
             {
                 Id = Guid.CreateVersion7(),
                 EventId = _model.EventId,

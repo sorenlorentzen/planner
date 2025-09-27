@@ -15,7 +15,7 @@ public class GetAllEvents : EndpointBaseAsync.WithoutRequest.WithResult<EventMod
         _invoker = invoker;
     }
     
-    [HttpGet("api/events")]
+    [HttpGet("/api/events")]
     [Tags("Events")]
     public override async Task<EventModel[]> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
     {

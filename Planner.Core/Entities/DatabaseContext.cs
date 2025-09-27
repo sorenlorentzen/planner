@@ -1,5 +1,7 @@
 using System;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage;
 using Sorenlorentzen.Invokable;
 
@@ -16,6 +18,25 @@ public class DatabaseContext : DbContext, IDatabaseContext
     {
         return Set<TEntity>();
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        var types = modelBuilder.Model.GetEntityTypes();
+        foreach (var entityType in types)
+        {
+            if (entityType.ClrType.IsAssignableTo(typeof(BaseEntity)))
+            {
+                var parameter = Expression.Parameter(entityType.ClrType);
+                var body = ReplacingExpressionVisitor.Replace(filterExpr.Parameters.First(), parameter, filterExpr.Body);
+                var lambdaExpression = Expression.Lambda(body, parameter);
+
+                // set filter
+                entityType.SetQueryFilter(lambdaExpression);
+            }
+        }
+
+    }
+    private Expression<Func<BaseEntity, bool>> filterExpr = b => b.Deleted == null;
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

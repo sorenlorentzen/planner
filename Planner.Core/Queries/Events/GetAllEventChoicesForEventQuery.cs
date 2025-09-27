@@ -5,11 +5,11 @@ using Sorenlorentzen.Invokable;
 
 namespace Planner.Core.Queries.Events;
 
-public class GetAllEventChoicesQuery : BaseQuery<EventChoiceModel[]>
+public class GetAllEventChoicesForEventQuery : BaseQuery<EventChoiceModel[]>
 {
     private readonly Guid _eventId;
 
-    public GetAllEventChoicesQuery(Guid eventId)
+    public GetAllEventChoicesForEventQuery(Guid eventId)
     {
         _eventId = eventId;
     }

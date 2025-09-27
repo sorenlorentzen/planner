@@ -21,11 +21,11 @@ public class GetEventChoices : EndpointBaseAsync.WithRequest<GetEventChoicesRequ
         _invoker = invoker;
     }
 
-    [HttpGet("/events/{id}/choices")]
+    [HttpGet("/api/events/{id}/choices")]
     [Tags("Events")]
     public override async Task<EventChoiceModel[]> HandleAsync(GetEventChoicesRequest request, CancellationToken cancellationToken = new CancellationToken())
     {
-        var choices = await _invoker.ExecuteQueryAsync(new GetAllEventChoicesQuery(request.Id));
+        var choices = await _invoker.ExecuteQueryAsync(new GetAllEventChoicesForEventQuery(request.Id));
 
         return choices;
     }

@@ -6,7 +6,7 @@ using Sorenlorentzen.Invokable;
 
 namespace Planner.Api.Endpoints.Events;
 
-public class CreateEventModel
+public class CreateEventRequest
 {
     public string Title { get; set; }
     public string Description { get; set; }
@@ -21,9 +21,16 @@ public class CreateEventModel
             IsMultipleChoice = IsMultipleChoice,
         };
     }
+    
+    public void MergeIntoEvent(EventModel e)
+    {
+        e.Title = Title;
+        e.Description = Description;
+        e.IsMultipleChoice = IsMultipleChoice;
+    }
 }
 
-public class CreateEvent : EndpointBaseAsync.WithRequest<CreateEventModel>.WithResult<Guid>
+public class CreateEvent : EndpointBaseAsync.WithRequest<CreateEventRequest>.WithResult<Guid>
 {
     private readonly IDatabaseInvoker _invoker;
 
@@ -34,7 +41,7 @@ public class CreateEvent : EndpointBaseAsync.WithRequest<CreateEventModel>.WithR
 
     [HttpPost("/api/events")]
     [Tags("Events")]
-    public override async Task<Guid> HandleAsync(CreateEventModel request, CancellationToken cancellationToken = new CancellationToken())
+    public override async Task<Guid> HandleAsync(CreateEventRequest request, CancellationToken cancellationToken = new CancellationToken())
     {
         var model = request.ToEventModel();
         var id = await _invoker.ExecuteCommandAsync(new SaveEventCommand(model));
