@@ -20,11 +20,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.UseSwaggerUI(x => x.SwaggerEndpoint("/openapi/v1.json", "Planner API v1"));
 
 app.MapControllers();
 
